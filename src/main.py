@@ -6,6 +6,7 @@ from .errors.custom_error import CustomError
 from .routes.auth import router as auth_router
 from .routes.prediction import router as prediction_router
 from .routes.model_manage import router as model_manage_router
+from .routes.user_manage import router as user_manage_router
 from .database import Base, engine
 from .models import models
 from sqlalchemy.orm import Session
@@ -15,15 +16,6 @@ from .schema.types import ModelPredictor_type
 app = FastAPI()
 models.Base.metadata.create_all(bind=engine)
 
-# def get_db():
-#     db = sessionLocal()
-#     try:
-#         yield db
-#     finally:
-#         db.close()
-
-# db_dependency = Annotated[Session, Depends(get_db)]
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -32,9 +24,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(auth_router, prefix="/api/auth")
+app.include_router(auth_router, prefix="/api")
 app.include_router(prediction_router, prefix="/api")
 app.include_router(model_manage_router, prefix="/api")
+app.include_router(user_manage_router, prefix="/api")
 
 
 @app.exception_handler(HTTPException)
