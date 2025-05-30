@@ -91,7 +91,11 @@ async def provide_get_modelPredictor_detail(db: Session, model_id: str):
 
 async def provide_get_modelPredictors(db: Session):
     try:
-        model_predictors = db.query(models.ModelPredictor).all()
+        model_predictors = (
+            db.query(models.ModelPredictor)
+            .order_by(models.ModelPredictor.uploaded_at.desc())
+            .all()
+        )
         result_model_predictors = []
         for model_pred in model_predictors:
             model_pred_dict = model_pred.to_dict()

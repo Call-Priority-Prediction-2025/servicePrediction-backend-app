@@ -14,6 +14,7 @@ from ..utils.prediction_util.encode_information import (
     get_encoded_datetime,
     get_encoded_maritalStatus,
 )
+from dotenv import load_dotenv
 
 import pandas as pd
 import json
@@ -21,8 +22,11 @@ import os
 import traceback
 import pickle
 
+load_dotenv()
 
-config = get_config()
+
+# config = get_config()
+SELECTED_MODEL = os.environ["SELECTED_MODEL_PREDICTOR"]
 
 
 # Services Functions ---
@@ -96,14 +100,14 @@ async def provide_prediction(file: UploadFile = File(...)):
         ]
         input_json = handle_file_to_dict(file, mandatory_columns)
 
-        print("testing model selected env: ", config.selected_model_predictor)
+        print("testing model selected env: ", SELECTED_MODEL)
 
         model_path = os.path.join(
             os.path.dirname(__file__),
             "..",
             "storage",
             "predictors",
-            config.selected_model_predictor,
+            SELECTED_MODEL,
         )
 
         with open(model_path, "rb") as f:

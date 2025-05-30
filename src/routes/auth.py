@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from jose import jwt, JWTError
 from sqlalchemy.orm import Session
-from ..services.auth_service import provide_login, get_current_user
+from ..services.auth_service import provide_login, get_current_user, provide_login_2
 from ..database import SessionLocal
 from ..schema import schemas
 from ..errors.custom_error import CustomError
