@@ -23,8 +23,8 @@ class ModelPredictor(ModelPredictorBase):
 
 
 class CreateUserRequest(BaseModel):
-    usercode: str = Field(..., min_length=1, description="User code")
-    username: str = Field(..., min_length=1, description="Username")
+    usercode: str = Field(..., min_length=8, max_length=10, description="User code")
+    username: str = Field(..., min_length=1, max_length=15, description="Username")
     password: str = Field(..., min_length=8, description="Password")
     confirm_password: str = Field(..., min_length=8, description="Confirm password")
     role: str = Field(default="user", description="Role")
@@ -51,10 +51,12 @@ class UserLoginRequest(BaseModel):
 
 
 class UpdateUserRequest(BaseModel):
-    username: str | None = Field(default_factory=lambda: None)
+    username: str | None = Field(default=None, min_length=1, description="Username")
     role: str | None = Field(default_factory=lambda: None)
-    password: str | None = Field(default_factory=lambda: None)
-    confirm_password: str | None = Field(default_factory=lambda: None)
+    password: str | None = Field(default=None, min_length=8, description="Password")
+    confirm_password: str | None = Field(
+        default=None, min_length=8, description="Confirm password"
+    )
 
 
 class Token(BaseModel):
@@ -65,6 +67,7 @@ class Token(BaseModel):
 class RoleEnum(str, Enum):
     admin = "admin"
     user = "user"
+
 
 # Model untuk request
 class ModelSelection(BaseModel):
