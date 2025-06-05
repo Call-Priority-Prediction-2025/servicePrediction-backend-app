@@ -193,6 +193,7 @@ async def provide_prediction_review(
                     "probability_rejected_call": round(prediction_probability[0][0], 3),
                     "probability_accepted_call": round(prediction_probability[0][1], 3),
                     "previous_status": 1 if eachData["total_talk_time"] > 0 else 0,
+                    "predicted_status": int(prediction[0]),
                     "conclusion_predict": (
                         "correct"
                         if prediction_probability[0][0] > prediction_probability[0][1]
@@ -227,7 +228,7 @@ async def provide_prediction_review(
             [
                 x
                 for x in result_json
-                if x["conclusion_predict"] == "correct" and x["previous_status"] == 1
+                if x["predicted_status"] == 1 and x["previous_status"] == 1
             ]
         )
         # prediksi salah keseluruhan label 1
@@ -235,7 +236,7 @@ async def provide_prediction_review(
             [
                 x
                 for x in result_json
-                if x["conclusion_predict"] == "wrong" and x["previous_status"] == 1
+                if x["predicted_status"] == 0 and x["previous_status"] == 1
             ]
         )
 
@@ -246,7 +247,7 @@ async def provide_prediction_review(
             [
                 x
                 for x in result_json
-                if x["conclusion_predict"] == "correct" and x["previous_status"] == 0
+                if x["predicted_status"] == 0 and x["previous_status"] == 0
             ]
         )
         # prediksi salah keseluruhan label 0
@@ -254,7 +255,7 @@ async def provide_prediction_review(
             [
                 x
                 for x in result_json
-                if x["conclusion_predict"] == "wrong" and x["previous_status"] == 0
+                if x["predicted_status"] == 1 and x["previous_status"] == 0
             ]
         )
 

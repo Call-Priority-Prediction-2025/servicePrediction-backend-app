@@ -1,3 +1,4 @@
+import traceback
 from fastapi import HTTPException, Form, status
 from sqlalchemy.orm import Session, aliased
 from sqlalchemy.sql import select, alias
@@ -14,6 +15,7 @@ async def provide_create_user(db: Session, create_user_request: CreateUserReques
     try:
 
         if create_user_request.password != create_user_request.confirm_password:
+            print("testing")
             raise CustomError(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Confirm password not match",
@@ -45,6 +47,7 @@ async def provide_create_user(db: Session, create_user_request: CreateUserReques
         )
     except Exception as e:
         if isinstance(e, CustomError):
+            print(traceback.format_exc())
             raise e
         else:
             print(e)

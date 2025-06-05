@@ -13,6 +13,8 @@ from .auth_service import get_current_user
 import traceback
 import os
 
+load_dotenv()
+
 
 async def provide_add_model(
     db: Session, new_modelPred: UploadFile = File(...), uploader_id: str = Form(...)
@@ -208,6 +210,11 @@ async def provide_delete_model(db: Session, model_id: str):
         file_location = os.path.join(storage_folder_path, existed_data.file_model_name)
         if not os.path.exists(file_location):
             raise CustomError(status_code=404, detail="File model predictor not found")
+
+        DEPLOYED_MODEL = os.environ["SELECTED_MODEL_PREDICTOR"]
+        if existed_data.file_model_name == DEPLOYED_MODEL:
+            raise CustomError(status_code=400, detail="Model predictor is deployed")
+
         os.remove(file_location)
 
         db.delete(existed_data)
